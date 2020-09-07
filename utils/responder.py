@@ -1,11 +1,10 @@
 import frappe
-from frappe import _
 import json
 from werkzeug.wrappers import Response
 
 class Responder:
     def respond(self, status=200, message='Success', data={}, errors={}):
-        response = frappe._dict({'message': _(message)})
+        response = frappe._dict({'message': frappe._(message)})
         if data:
             response['data'] = data
         if errors:
