@@ -4,46 +4,31 @@ from __future__ import unicode_literals
 __version__ = '0.0.1'
 
 import frappe
-
 from utils.responder import Responder
-frappe.responder = Responder()
+responder = Responder()
 
-# class JsonException(Exception):
-# 	"""
-# 	Exception that returns JSON Response
-# 	Extend all Application Exceptions 
-# 	from this class to want a JSON Response
-# 	"""
-# 	headers = dict(frappe.request.headers)
-# 	headers['Accept'] = 'application/json'
-# 	frappe.request.headers = headers
+class APIException(Exception):
+	"""
+	Base Exception for API Requests
 
-# def validate_input(data=None, rules=None):
-# 	raise ValidationException({'asd': 'jkslkasd', 'jkdjk': 'lkjasdjlasf'})
+	Usage:
+	try:
+		...
+	except APIException as e:
+		return e.respond()
+	"""
 
-# class ValidationException(JsonException):
-# 	http_status_code = 422
+	http_status_code=None
+	message=None
+	
+	def __init__(self, message=frappe._('Something went Wrong'), errors={}):
+		if not self.message:
+			self.message = message
+		self.errors = errors
 
-# 	def __init__(self, errors):
-# 		respond(message='Validation Exception', errors=errors)
+	def respond(self):
+		return responder.respond(status=self.http_status_code, message=self.message, errors=self.errors)
 
-# def respond(http_status_code=200, message='Success', data={}, errors={}):
-# 	frappe.response.http_status_code = http_status_code
-# 	frappe.response.message = message
-# 	if data:
-# 		frappe.response.data = data
-# 	if errors:
-# 		frappe.response.errors = errors
-
-@frappe.whitelist(allow_guest=True)
-def test():
-	from utils.responder import Responder
-	return frappe.responder.respond(data={'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'})
-	# from werkzeug.wrappers import Response
-	# import json
-	# return Response(response=json.dumps({'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'}), status=422, content_type='application/json')
-	# response.status_code = 422
-
-	# response.mimetype = 'application/json'
-	# response.charset = 'utf-8'
-	# response.data = json.dumps({'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'})
+class ValidationException(APIException):
+	http_status_code = 422
+	message = frappe._('Validation Error')
