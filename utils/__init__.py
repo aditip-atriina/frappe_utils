@@ -18,8 +18,7 @@ class APIException(Exception):
 		return e.respond()
 	"""
 
-	http_status_code=None
-	message=None
+	http_status_code = message = None
 	
 	def __init__(self, message=frappe._('Something went Wrong'), errors={}):
 		if not self.message:
