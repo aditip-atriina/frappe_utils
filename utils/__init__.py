@@ -7,6 +7,16 @@ import frappe
 from utils.responder import Responder
 responder = Responder()
 
+from validator import validate as validate_
+
+def validate(data, rules):
+	valid, valid_data, errors = validate_(data, rules, return_info=True)
+
+	if not valid:
+		raise ValidationException(errors=errors)
+
+	return valid_data
+
 class APIException(Exception):
 	"""
 	Base Exception for API Requests
@@ -31,3 +41,10 @@ class APIException(Exception):
 class ValidationException(APIException):
 	http_status_code = 422
 	message = frappe._('Validation Error')
+
+	def __init__(self, errors):
+		errors_ = dict()
+		for key in errors.keys():
+			# getting first error message
+			errors_[key] = list(errors[key].values())[0]
+		self.errors = errors_
