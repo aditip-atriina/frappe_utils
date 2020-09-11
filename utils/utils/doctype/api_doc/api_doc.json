@@ -1,0 +1,119 @@
+{
+ "autoname": "field:title",
+ "creation": "2020-09-09 22:42:56.966299",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "method",
+  "path",
+  "title",
+  "version",
+  "group",
+  "column_break_6",
+  "description",
+  "section_break_8",
+  "should_be_ignored",
+  "ignore_hint",
+  "column_break_11",
+  "is_depricated",
+  "deprication_description"
+ ],
+ "fields": [
+  {
+   "fieldname": "method",
+   "fieldtype": "Select",
+   "label": "Method",
+   "options": "GET\nPOST\nPUT\nPATCH\nDELETE"
+  },
+  {
+   "fieldname": "path",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Path",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "label": "Version"
+  },
+  {
+   "default": "Miscellaneous",
+   "fieldname": "group",
+   "fieldtype": "Data",
+   "label": "Group"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "should_be_ignored",
+   "fieldtype": "Check",
+   "label": "Ignore?"
+  },
+  {
+   "depends_on": "eval:doc.should_be_ignored",
+   "fieldname": "ignore_hint",
+   "fieldtype": "Small Text",
+   "label": "Ignore hint"
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_depricated",
+   "fieldtype": "Check",
+   "label": "Depricated?"
+  },
+  {
+   "depends_on": "eval:doc.is_depricated",
+   "fieldname": "deprication_description",
+   "fieldtype": "Small Text",
+   "label": "Deprication description"
+  }
+ ],
+ "modified": "2020-09-12 02:24:19.133940",
+ "modified_by": "Administrator",
+ "module": "Utils",
+ "name": "API Doc",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
