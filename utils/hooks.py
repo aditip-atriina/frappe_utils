@@ -57,7 +57,7 @@ app_license = "MIT"
 # ------------
 
 # before_install = "utils.install.before_install"
-# after_install = "utils.install.after_install"
+after_install = ["utils.oauth2.setup"]
 
 # Desk Notifications
 # ------------------
