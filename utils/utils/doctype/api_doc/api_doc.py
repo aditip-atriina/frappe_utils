@@ -215,12 +215,12 @@ class APIDoc(Document):
 
 
 @frappe.whitelist()
-def generate_api_docs():
+def generate_api_docs(app_name):
 	import os
 	from json import dumps
 
-	apidocs_main_folder = frappe.get_app_path('utils', '..', '..', '..', 'config', 'apidocs')
-	apidocs_output_folder = frappe.get_app_path('utils', 'public', 'apidocs')
+	apidocs_main_folder = frappe.get_app_path(app_name, '..', '..', '..', 'config', 'apidocs')
+	apidocs_output_folder = frappe.get_app_path(app_name, 'public', 'apidocs')
 
 	# create directories
 	os.mkdir(apidocs_main_folder)
