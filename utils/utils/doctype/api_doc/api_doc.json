@@ -1,0 +1,162 @@
+{
+ "creation": "2020-09-09 22:42:56.966299",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "method",
+  "path",
+  "version",
+  "column_break_6",
+  "group",
+  "title",
+  "use_api_define",
+  "api_define",
+  "section_break_7",
+  "headers",
+  "headers_example",
+  "section_break_9",
+  "parameters",
+  "parameters_example",
+  "section_break_15",
+  "success",
+  "success_example",
+  "section_break_18",
+  "error",
+  "error_example"
+ ],
+ "fields": [
+  {
+   "fieldname": "method",
+   "fieldtype": "Select",
+   "label": "Method",
+   "options": "GET\nPOST\nPUT\nPATCH\nDELETE"
+  },
+  {
+   "fieldname": "path",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Path"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title"
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "label": "Version"
+  },
+  {
+   "fieldname": "group",
+   "fieldtype": "Data",
+   "label": "Group"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "headers",
+   "fieldtype": "Table",
+   "label": "Headers",
+   "options": "API Doc Header"
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "parameters",
+   "fieldtype": "Table",
+   "label": "Parameters",
+   "options": "API Doc Param"
+  },
+  {
+   "depends_on": "eval:!doc.api_define",
+   "fieldname": "use_api_define",
+   "fieldtype": "Table MultiSelect",
+   "label": "Use API Define",
+   "options": "API Doc Use"
+  },
+  {
+   "default": "0",
+   "fieldname": "api_define",
+   "fieldtype": "Check",
+   "label": "API Define"
+  },
+  {
+   "fieldname": "headers_example",
+   "fieldtype": "Table",
+   "label": "Headers Example",
+   "options": "API Doc Header Example"
+  },
+  {
+   "fieldname": "parameters_example",
+   "fieldtype": "Table",
+   "label": "Parameters Example",
+   "options": "API Doc Param Example"
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "success",
+   "fieldtype": "Table",
+   "label": "Success",
+   "options": "API Doc Success"
+  },
+  {
+   "fieldname": "success_example",
+   "fieldtype": "Table",
+   "label": "Success Example",
+   "options": "API Doc Success Example"
+  },
+  {
+   "fieldname": "section_break_18",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "error",
+   "fieldtype": "Table",
+   "label": "Error",
+   "options": "API Doc Error"
+  },
+  {
+   "fieldname": "error_example",
+   "fieldtype": "Table",
+   "label": "Error Example",
+   "options": "API Doc Error Example"
+  }
+ ],
+ "modified": "2020-09-12 22:18:24.361277",
+ "modified_by": "Administrator",
+ "module": "Utils",
+ "name": "API Doc",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "title",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

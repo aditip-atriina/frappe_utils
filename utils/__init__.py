@@ -48,3 +48,8 @@ class ValidationException(APIException):
 			# getting first error message
 			errors_[key] = list(errors[key].values())[0]
 		self.errors = errors_
+
+def system_command(cmd):
+	import subprocess
+	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+	return process.communicate()

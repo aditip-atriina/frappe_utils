@@ -36,6 +36,10 @@ class ValidationException(APIException):
         self.errors = errors
 ```
 
+#### API Documentation
+* Create API Documentation using [apidocjs](//apidocjs.com)
+* Checkout API Doc Doctype
+
 #### License
 
 MIT
