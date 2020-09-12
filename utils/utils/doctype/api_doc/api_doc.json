@@ -17,7 +17,13 @@
   "headers_example",
   "section_break_9",
   "parameters",
-  "parameters_example"
+  "parameters_example",
+  "section_break_15",
+  "success",
+  "success_example",
+  "section_break_18",
+  "error",
+  "error_example"
  ],
  "fields": [
   {
@@ -96,9 +102,41 @@
    "fieldtype": "Table",
    "label": "Parameters Example",
    "options": "API Doc Param Example"
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "success",
+   "fieldtype": "Table",
+   "label": "Success",
+   "options": "API Doc Success"
+  },
+  {
+   "fieldname": "success_example",
+   "fieldtype": "Table",
+   "label": "Success Example",
+   "options": "API Doc Success Example"
+  },
+  {
+   "fieldname": "section_break_18",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "error",
+   "fieldtype": "Table",
+   "label": "Error",
+   "options": "API Doc Error"
+  },
+  {
+   "fieldname": "error_example",
+   "fieldtype": "Table",
+   "label": "Error Example",
+   "options": "API Doc Error Example"
   }
  ],
- "modified": "2020-09-12 20:52:30.828194",
+ "modified": "2020-09-12 22:18:24.361277",
  "modified_by": "Administrator",
  "module": "Utils",
  "name": "API Doc",

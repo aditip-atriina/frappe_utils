@@ -127,6 +127,72 @@ class APIDoc(Document):
 
 		return api_uses
 
+	def get_api_success(self):
+		success = ""
+		for success_ in self.success:
+			s = ["@apiSuccess"]
+			
+			if success_.group:
+				s.append("({})".format(success_.group))
+			
+			s.append("{{{}}}".format(success_.type))
+
+			field = success_.field
+			if success_.default_value:
+				field += "=\"{}\"".format(success_.default_value)
+			s.append(field)
+
+			if success_.description:
+				s.append(success_.description)
+
+			success += "{}\n".format(' '.join(s))
+
+		return success
+
+	def get_api_success_example(self):
+		success_example = ""
+		for success_example_ in self.success_example:
+			se = ["@apiSuccessExample"]
+
+			se.append(success_example_.title)
+
+			success_example += "{}\n{}\n".format(' '.join(se), success_example_.example)
+
+		return success_example
+
+	def get_api_error(self):
+		error = ""
+		for error_ in self.error:
+			e = ["@apiError"]
+			
+			if error_.group:
+				e.append("({})".format(error_.group))
+			
+			e.append("{{{}}}".format(error_.type))
+
+			field = error_.field
+			if error_.default_value:
+				field += "=\"{}\"".format(error_.default_value)
+			e.append(field)
+
+			if error_.description:
+				e.append(error_.description)
+
+			error += "{}\n".format(' '.join(e))
+
+		return error
+
+	def get_api_error_example(self):
+		error_example = ""
+		for error_example_ in self.error_example:
+			ee = ["@apiErrorExample"]
+
+			ee.append(error_example_.title)
+
+			error_example += "{}\n{}\n".format(' '.join(ee), error_example_.example)
+
+		return error_example
+
 
 	def generate_apidoc_comment(self):
 		block = "\"\"\"\n"
@@ -139,6 +205,10 @@ class APIDoc(Document):
 		block += self.get_api_parameters()
 		block += self.get_api_parameters_example()
 		block += self.get_api_uses()
+		block += self.get_api_success()
+		block += self.get_api_success_example()
+		block += self.get_api_error()
+		block += self.get_api_error_example()
 		block += "\"\"\"\n\n"
 
 		return block
