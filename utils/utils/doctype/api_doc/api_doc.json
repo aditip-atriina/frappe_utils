@@ -30,15 +30,13 @@
    "fieldname": "path",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Path",
-   "reqd": 1
+   "label": "Path"
   },
   {
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Title",
-   "reqd": 1
+   "label": "Title"
   },
   {
    "fieldname": "version",
@@ -46,7 +44,6 @@
    "label": "Version"
   },
   {
-   "default": "Miscellaneous",
    "fieldname": "group",
    "fieldtype": "Data",
    "label": "Group"
@@ -76,9 +73,11 @@
    "options": "API Doc Param"
   },
   {
+   "depends_on": "eval:!doc.api_define",
    "fieldname": "use_api_define",
-   "fieldtype": "Data",
-   "label": "Use API Define"
+   "fieldtype": "Table MultiSelect",
+   "label": "Use API Define",
+   "options": "API Doc Use"
   },
   {
    "default": "0",
@@ -99,7 +98,7 @@
    "options": "API Doc Param Example"
   }
  ],
- "modified": "2020-09-12 16:25:34.419979",
+ "modified": "2020-09-12 20:52:30.828194",
  "modified_by": "Administrator",
  "module": "Utils",
  "name": "API Doc",
@@ -118,6 +117,7 @@
    "write": 1
   }
  ],
+ "search_fields": "title",
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

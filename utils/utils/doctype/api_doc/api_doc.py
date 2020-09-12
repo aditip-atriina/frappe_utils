@@ -9,16 +9,34 @@ import utils
 
 class APIDoc(Document):
 	def before_save(self):
-		if not self.group:
+		# non grouped entries to be grouped under Miscellaneous
+		# except for @apiDefine
+		if not self.group and not self.api_define:
 			self.group = "Miscellaneous"
+
+		# @apiDefine title will be without spaces
+		if self.api_define:
+			self.title = self.title.replace(' ', '')
+
+		# set api_doc_title for @apiUse multiselect
+		for api in self.use_api_define:
+			api.api_doc_title = frappe.db.get_value('API Doc', api.api_doc, 'title')
 	
 	def get_api(self):
+		if not self.path:
+			return ""
+
 		return "@api {{{method}}} {path} {title}\n".format(method=self.method, path=self.path, title=self.title)
 
 	def get_api_name(self):
-		return "@apiName {name}\n".format(name=self.title)
+		if self.api_define:
+			return "@apiDefine {title}\n".format(title=self.title)
+		else:
+			return "@apiName {name}\n".format(name=self.title)
 
 	def get_api_group(self):
+		if not self.group:
+			return ""
 		return "@apiGroup {group}\n".format(group=self.group)
 
 	def get_api_version(self):
@@ -102,6 +120,13 @@ class APIDoc(Document):
 
 		return parameters_example
 
+	def get_api_uses(self):
+		api_uses = ""
+		for api_use in self.use_api_define:
+			api_uses += "@apiUse {}\n".format(api_use.api_doc_title)
+
+		return api_uses
+
 
 	def generate_apidoc_comment(self):
 		block = "\"\"\"\n"
@@ -113,6 +138,7 @@ class APIDoc(Document):
 		block += self.get_api_headers_example()
 		block += self.get_api_parameters()
 		block += self.get_api_parameters_example()
+		block += self.get_api_uses()
 		block += "\"\"\"\n\n"
 
 		return block

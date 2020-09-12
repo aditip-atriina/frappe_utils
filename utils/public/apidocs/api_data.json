@@ -5,6 +5,9 @@
     "title": "Create User",
     "name": "Create_User",
     "group": "Miscellaneous",
+    "version": "0.0.0",
+    "filename": "/Users/neel/qct/frappe-bench/config/apidocs/apidoc.py",
+    "groupTitle": "Miscellaneous",
     "header": {
       "fields": {
         "Header": [
@@ -13,8 +16,7 @@
             "type": "String",
             "optional": false,
             "field": "Authorization",
-            "defaultValue": "token &lt;&lt;token&gt;&gt;",
-            "description": ""
+            "description": "<p>Authorization token</p>"
           },
           {
             "group": "Header",
@@ -28,15 +30,12 @@
       },
       "examples": [
         {
-          "title": "Mobile headers",
-          "content": "{\"Authorization\":\"token token\",\"Accept\":\"application/json\"}",
+          "title": "Mobile App Headers",
+          "content": "{\"Authorization\":\"token lkasdjfaksdfjlka\",\"Accept\":\"application/json\"}",
           "type": "json"
         }
       ]
-    },
-    "version": "0.0.0",
-    "filename": "/Users/neel/qct/frappe-bench/config/apidocs/apidoc.py",
-    "groupTitle": "Miscellaneous"
+    }
   },
   {
     "type": "GET",
