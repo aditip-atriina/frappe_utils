@@ -1,5 +1,4 @@
 {
- "autoname": "field:title",
  "creation": "2020-09-09 22:42:56.966299",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -7,17 +6,18 @@
  "field_order": [
   "method",
   "path",
-  "title",
   "version",
-  "group",
   "column_break_6",
-  "description",
-  "section_break_8",
-  "should_be_ignored",
-  "ignore_hint",
-  "column_break_11",
-  "is_depricated",
-  "deprication_description"
+  "group",
+  "title",
+  "use_api_define",
+  "api_define",
+  "section_break_7",
+  "headers",
+  "headers_example",
+  "section_break_9",
+  "parameters",
+  "parameters_example"
  ],
  "fields": [
   {
@@ -38,8 +38,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Title",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "version",
@@ -57,44 +56,50 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "description",
-   "fieldtype": "Text",
-   "label": "Description"
+   "fieldname": "headers",
+   "fieldtype": "Table",
+   "label": "Headers",
+   "options": "API Doc Header"
   },
   {
-   "fieldname": "section_break_8",
+   "fieldname": "section_break_7",
    "fieldtype": "Section Break"
   },
   {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "parameters",
+   "fieldtype": "Table",
+   "label": "Parameters",
+   "options": "API Doc Param"
+  },
+  {
+   "fieldname": "use_api_define",
+   "fieldtype": "Data",
+   "label": "Use API Define"
+  },
+  {
    "default": "0",
-   "fieldname": "should_be_ignored",
+   "fieldname": "api_define",
    "fieldtype": "Check",
-   "label": "Ignore?"
+   "label": "API Define"
   },
   {
-   "depends_on": "eval:doc.should_be_ignored",
-   "fieldname": "ignore_hint",
-   "fieldtype": "Small Text",
-   "label": "Ignore hint"
+   "fieldname": "headers_example",
+   "fieldtype": "Table",
+   "label": "Headers Example",
+   "options": "API Doc Header Example"
   },
   {
-   "fieldname": "column_break_11",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_depricated",
-   "fieldtype": "Check",
-   "label": "Depricated?"
-  },
-  {
-   "depends_on": "eval:doc.is_depricated",
-   "fieldname": "deprication_description",
-   "fieldtype": "Small Text",
-   "label": "Deprication description"
+   "fieldname": "parameters_example",
+   "fieldtype": "Table",
+   "label": "Parameters Example",
+   "options": "API Doc Param Example"
   }
  ],
- "modified": "2020-09-12 02:24:19.133940",
+ "modified": "2020-09-12 16:25:34.419979",
  "modified_by": "Administrator",
  "module": "Utils",
  "name": "API Doc",

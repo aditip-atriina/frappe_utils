@@ -8,20 +8,111 @@ from frappe.model.document import Document
 import utils
 
 class APIDoc(Document):
+	def before_save(self):
+		if not self.group:
+			self.group = "Miscellaneous"
+	
 	def get_api(self):
-		return "@api {{{method}}} {path} {title}".format(method=self.method, path=self.path, title=self.title)
+		return "@api {{{method}}} {path} {title}\n".format(method=self.method, path=self.path, title=self.title)
 
 	def get_api_name(self):
-		return "@apiName {name}".format(name=self.title)
+		return "@apiName {name}\n".format(name=self.title)
 
 	def get_api_group(self):
-		return "@apiGroup {group}".format(group=self.group)
+		return "@apiGroup {group}\n".format(group=self.group)
+
+	def get_api_version(self):
+		output = ""
+		if self.version:
+			output = "@apiVersion {version}\n".format(version=self.version)
+		return output
+
+	def get_api_headers(self):
+		headers = ""
+		for header in self.headers:
+			h = ["@apiHeader"]
+			
+			if header.group:
+				h.append("({})".format(header.group))
+			
+			h.append("{{{}}}".format(header.type))
+
+			field = header.field
+			if header.default_value:
+				field += "=\"{}\"".format(header.default_value)
+			if header.optional:
+				field = "[{}]".format(field)
+			h.append(field)
+
+			if header.description:
+				h.append(header.description)
+
+			headers += "{}\n".format(' '.join(h))
+
+		return headers
+
+	def get_api_headers_example(self):
+		headers_example = ""
+		for header_example in self.headers_example:
+			he = ["@apiHeaderExample"]
+
+			he.append(header_example.title)
+
+			headers_example += "{}\n{}\n".format(' '.join(he), header_example.example)
+
+		return headers_example
+
+	def get_api_parameters(self):
+		parameters = ""
+		for parameter in self.parameters:
+			p = ["@apiParam"]
+			
+			if parameter.group:
+				p.append("({})".format(parameter.group))
+			
+			type_ = parameter.type
+			if parameter.size:
+				type_ += "{{{}}}".format(parameter.size)
+			if parameter.allowed_values:
+				type_ += "=\"{}\"".format(parameter.allowed_values)
+			p.append("{{{}}}".format(type_))
+
+			field = parameter.field
+			if parameter.default_value:
+				field += "=\"{}\"".format(parameter.default_value)
+			if parameter.optional:
+				field = "[{}]".format(field)
+			p.append(field)
+
+			if parameter.description:
+				p.append(parameter.description)
+
+			parameters += "{}\n".format(' '.join(p))
+
+		return parameters
+
+	def get_api_parameters_example(self):
+		parameters_example = ""
+		for parameter_example in self.parameters_example:
+			he = ["@apiParamExample"]
+
+			he.append(parameter_example.title)
+
+			parameters_example += "{}\n{}\n".format(' '.join(he), parameter_example.example)
+
+		return parameters_example
+
 
 	def generate_apidoc_comment(self):
 		block = "\"\"\"\n"
-		block += self.get_api() + "\n"
-		block += self.get_api_name() + "\n"
-		block += self.get_api_group() + "\n"
+		block += self.get_api()
+		block += self.get_api_name()
+		block += self.get_api_group()
+		block += self.get_api_version()
+		block += self.get_api_headers()
+		block += self.get_api_headers_example()
+		block += self.get_api_parameters()
+		block += self.get_api_parameters_example()
 		block += "\"\"\"\n\n"
 
 		return block
