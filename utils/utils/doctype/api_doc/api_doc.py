@@ -233,8 +233,10 @@ def generate_api_docs(app_name):
 	f.close()
 
 	# writing apidoc.json
+	app = __import__(app_name)
 	apidoc_json = {
-		'name': frappe.get_site_path().replace('./', '')
+		'name': "{} API Docs".format(frappe.get_site_path().replace('./', '').title()),
+		'version': app.__version__
 	}
 	f = open(os.path.join(apidocs_main_folder, 'apidoc.json'), 'a+')
 	f.write(dumps(apidoc_json))
