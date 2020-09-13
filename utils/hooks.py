@@ -128,3 +128,7 @@ after_install = ["utils.oauth2.setup"]
 # override_doctype_dashboards = {
 # 	"Task": "utils.task.get_dashboard_data"
 # }
+
+fixtures = [
+    'API Doc'
+]
