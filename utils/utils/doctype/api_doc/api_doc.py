@@ -243,7 +243,7 @@ def generate_api_docs(app_name):
 	f.close()
 
 	# generating apidoc output
-	cmd = "{app_location}/../node_modules/apidoc/bin/apidoc -i {src} -o {output} -c {config}".format(
+	cmd = "{app_location}/../node_modules/.bin/apidoc -i {src} -o {output} -c {config}".format(
 		app_location=frappe.get_app_path('utils'), 
 		src=apidocs_main_folder, 
 		output=apidocs_output_folder,
