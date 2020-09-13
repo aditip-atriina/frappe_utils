@@ -19,7 +19,7 @@ Example:
 ```
 try:
     ...
-except APIException as e:
+except utils.APIException as e:
     return e.respond()
 ```
 
@@ -39,6 +39,10 @@ class ValidationException(APIException):
 #### API Documentation
 * Create API Documentation using [apidocjs](//apidocjs.com)
 * Checkout API Doc Doctype
+
+#### Data Validation
+* Use `utils.validate(data, rules)` to validate data sent to the API
+* For rules, checkout [validator](https://pypi.org/project/validator/) python package
 
 #### License
 
