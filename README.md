@@ -44,6 +44,11 @@ class ValidationException(APIException):
 * Use `utils.validate(data, rules)` to validate data sent to the API
 * For rules, checkout [validator](https://pypi.org/project/validator/) python package
 
+#### API Testing
+* Can do API Testing only for the APIs written using the format given in [APIException Class](#apiexception-class)
+* Go through `api.py` for knowing how to write APIs
+* Go through `tests/test_api.py` to know how to write tests for those APIs.
+
 #### License
 
 MIT
