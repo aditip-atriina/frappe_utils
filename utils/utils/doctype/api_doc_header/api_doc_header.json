@@ -1,0 +1,66 @@
+{
+ "creation": "2020-09-12 02:42:09.831565",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "type",
+  "field",
+  "description",
+  "optional",
+  "default_value",
+  "group"
+ ],
+ "fields": [
+  {
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "field",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Field",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
+   "default": "0",
+   "fieldname": "optional",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Optional"
+  },
+  {
+   "fieldname": "group",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Group"
+  },
+  {
+   "fieldname": "default_value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Default Value"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-09-12 02:44:51.465596",
+ "modified_by": "Administrator",
+ "module": "Utils",
+ "name": "API Doc Header",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

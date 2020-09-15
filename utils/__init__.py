@@ -1,49 +1,55 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '0.0.1'
+__version__ = '1.0.0'
 
 import frappe
-
 from utils.responder import Responder
-frappe.responder = Responder()
+responder = Responder()
 
-# class JsonException(Exception):
-# 	"""
-# 	Exception that returns JSON Response
-# 	Extend all Application Exceptions 
-# 	from this class to want a JSON Response
-# 	"""
-# 	headers = dict(frappe.request.headers)
-# 	headers['Accept'] = 'application/json'
-# 	frappe.request.headers = headers
+from validator import validate as validate_
 
-# def validate_input(data=None, rules=None):
-# 	raise ValidationException({'asd': 'jkslkasd', 'jkdjk': 'lkjasdjlasf'})
+def validate(data, rules):
+	valid, valid_data, errors = validate_(data, rules, return_info=True)
 
-# class ValidationException(JsonException):
-# 	http_status_code = 422
+	if not valid:
+		raise ValidationException(errors=errors)
 
-# 	def __init__(self, errors):
-# 		respond(message='Validation Exception', errors=errors)
+	return valid_data
 
-# def respond(http_status_code=200, message='Success', data={}, errors={}):
-# 	frappe.response.http_status_code = http_status_code
-# 	frappe.response.message = message
-# 	if data:
-# 		frappe.response.data = data
-# 	if errors:
-# 		frappe.response.errors = errors
+class APIException(Exception):
+	"""
+	Base Exception for API Requests
 
-@frappe.whitelist(allow_guest=True)
-def test():
-	from utils.responder import Responder
-	return frappe.responder.respond(data={'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'})
-	# from werkzeug.wrappers import Response
-	# import json
-	# return Response(response=json.dumps({'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'}), status=422, content_type='application/json')
-	# response.status_code = 422
+	Usage:
+	try:
+		...
+	except APIException as e:
+		return e.respond()
+	"""
 
-	# response.mimetype = 'application/json'
-	# response.charset = 'utf-8'
-	# response.data = json.dumps({'asdf': 'adsffasd', 'jksldjlkj': 'klasjdflkjaskdj'})
+	http_status_code = message = None
+	
+	def __init__(self, message=frappe._('Something went Wrong'), errors={}):
+		if not self.message:
+			self.message = message
+		self.errors = errors
+
+	def respond(self):
+		return responder.respond(status=self.http_status_code, message=self.message, errors=self.errors)
+
+class ValidationException(APIException):
+	http_status_code = 422
+	message = frappe._('Validation Error')
+
+	def __init__(self, errors):
+		errors_ = dict()
+		for key in errors.keys():
+			# getting first error message
+			errors_[key] = list(errors[key].values())[0]
+		self.errors = errors_
+
+def system_command(cmd):
+	import subprocess
+	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+	return process.communicate()
