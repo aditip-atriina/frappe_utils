@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 import utils
+from werkzeug.wrappers import Response
 
 class APIDoc(Document):
 	def before_save(self):
@@ -220,7 +221,7 @@ def generate_api_docs(app_name):
 	from json import dumps
 
 	apidocs_main_folder = frappe.get_app_path(app_name, '..', '..', '..', 'config', 'apidocs')
-	apidocs_output_folder = frappe.get_app_path(app_name, 'public', 'apidocs')
+	apidocs_output_folder = frappe.get_site_path('apidocs')
 
 	# create directories
 	os.mkdir(apidocs_main_folder)
@@ -243,7 +244,7 @@ def generate_api_docs(app_name):
 	f.close()
 
 	# generating apidoc output
-	cmd = "{app_location}/../node_modules/.bin/apidoc -i {src} -o {output} -c {config}".format(
+	cmd = "{app_location}/../node_modules/.bin/apidoc -i {src} -o {output} -c {config} --single".format(
 		app_location=frappe.get_app_path('utils'), 
 		src=apidocs_main_folder, 
 		output=apidocs_output_folder,
@@ -251,10 +252,18 @@ def generate_api_docs(app_name):
 	)
 	utils.system_command(cmd)
 
-	# deleting apidocs_main_folder
+	# read contents of apidoc html file
+	apidoc_html_file = open(os.path.join(apidocs_output_folder, 'index.html'), 'r')
+	content = apidoc_html_file.read()
+	apidoc_html_file.close()
+
+	# deleting generated directories
 	from shutil import rmtree
 	rmtree(apidocs_main_folder)
+	rmtree(apidocs_output_folder)
 
-	
+	frappe.local.response.filename = 'index.html'
+	frappe.local.response.filecontent = content
+	frappe.local.response.type = 'download'
 
 
