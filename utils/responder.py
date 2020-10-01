@@ -23,3 +23,5 @@ class Responder:
 
     def respondForbidden(self, status=403, message='Forbidden'):
         return self.respond(status=status, message=message)
+
+responder = Responder()
