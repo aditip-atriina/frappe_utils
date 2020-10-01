@@ -19,7 +19,7 @@ Example:
 ```
 try:
     ...
-except utils.APIException as e:
+except utils.exceptions.APIException as e:
     return e.respond()
 ```
 
@@ -30,7 +30,7 @@ Example:
 ```
 class ValidationException(APIException):
     http_status_code = 422
-    message = frappe._('Validation Error')
+    message = _('Validation Error')
 
     def __init__(self, errors):
         self.errors = errors
@@ -41,8 +41,11 @@ class ValidationException(APIException):
 * Checkout API Doc Doctype
 
 #### Data Validation
-* Use `utils.validate(data, rules)` to validate data sent to the API
+* Use `utils.validator.validate(data, rules)` to validate data sent to the API
 * For rules, checkout [validator](https://pypi.org/project/validator/) python package
+* New rule: <kbd>utils.validator.rules.ExistsRule(doctype='User', fields='email', message='Email already taken')</kbd>
+* New rule: To validate HTTP method
+<kbd>utils.validator.validate_http_method('post', 'patch')</kbd>
 
 #### API Testing
 * Can do API Testing only for the APIs written using the format given in [APIException Class](#apiexception-class)
