@@ -7,6 +7,8 @@ import frappe
 from frappe.model.document import Document
 import utils
 from werkzeug.wrappers import Response
+import os
+from json import dumps, loads
 
 class APIDoc(Document):
 	def before_save(self):
@@ -214,20 +216,15 @@ class APIDoc(Document):
 
 		return block
 
-
-@frappe.whitelist()
-def generate_api_docs(app_name):
-	import os
-	from json import dumps
-
-	apidocs_main_folder = frappe.get_app_path(app_name, '..', '..', '..', 'config', 'apidocs')
+def apidoc_cmd(app_name, single=False):
+	apidocs_src_folder = frappe.get_app_path(app_name, '..', '..', '..', 'config', 'apidocs')
 	apidocs_output_folder = frappe.get_site_path('apidocs')
 
 	# create directories
-	os.mkdir(apidocs_main_folder)
+	os.mkdir(apidocs_src_folder)
 
 	# writing apidoc blocks
-	f = open(os.path.join(apidocs_main_folder, 'apidoc.py'), 'a+')
+	f = open(os.path.join(apidocs_src_folder, 'apidoc.py'), 'a+')
 	for apidoc_name in [a[0] for a in frappe.db.sql('select name from `tabAPI Doc`')]:
 		apidoc = frappe.get_doc('API Doc', apidoc_name)
 		f.write(apidoc.generate_apidoc_comment())
@@ -239,31 +236,126 @@ def generate_api_docs(app_name):
 		'name': "{} API Docs".format(frappe.get_site_path().replace('./', '').title()),
 		'version': app.__version__
 	}
-	f = open(os.path.join(apidocs_main_folder, 'apidoc.json'), 'a+')
+	f = open(os.path.join(apidocs_src_folder, 'apidoc.json'), 'a+')
 	f.write(dumps(apidoc_json))
 	f.close()
 
 	# generating apidoc output
-	cmd = "{app_location}/../node_modules/.bin/apidoc -i {src} -o {output} -c {config} --single".format(
+	cmd = "{app_location}/../node_modules/.bin/apidoc -i {src} -o {output} -c {config} {single}".format(
 		app_location=frappe.get_app_path('utils'), 
-		src=apidocs_main_folder, 
+		src=apidocs_src_folder, 
 		output=apidocs_output_folder,
-		config=os.path.join(apidocs_main_folder, 'apidoc.json')
+		config=os.path.join(apidocs_src_folder, 'apidoc.json'),
+		single='--single' if single else ''
 	)
 	utils.system_command(cmd)
 
+	return {'out': apidocs_output_folder, 'src': apidocs_src_folder}
+
+def delete_apidocs_dirs(paths):
+	from shutil import rmtree
+	for path in paths.values():
+		rmtree(path)
+
+def download_file(filename, filecontent):
+	frappe.local.response.filename = filename
+	frappe.local.response.filecontent = filecontent
+	frappe.local.response.type = 'download'
+
+@frappe.whitelist()
+def generate_api_docs(app_name):
+	apidoc_dir_paths = apidoc_cmd(app_name, single=True)
+
 	# read contents of apidoc html file
-	apidoc_html_file = open(os.path.join(apidocs_output_folder, 'index.html'), 'r')
+	apidoc_html_file = open(os.path.join(apidoc_dir_paths.get('out'), 'index.html'), 'r')
 	content = apidoc_html_file.read()
 	apidoc_html_file.close()
 
-	# deleting generated directories
-	from shutil import rmtree
-	rmtree(apidocs_main_folder)
-	rmtree(apidocs_output_folder)
-
-	frappe.local.response.filename = 'index.html'
-	frappe.local.response.filecontent = content
-	frappe.local.response.type = 'download'
+	delete_apidocs_dirs(apidoc_dir_paths)
+	download_file(filename='index.html', filecontent=content)
 
 
+@frappe.whitelist()
+def generate_insomnia_export(app_name):
+	apidoc_dir_paths = apidoc_cmd(app_name)
+	
+	# read contents of api_data.json file
+	api_data = open(os.path.join(apidoc_dir_paths.get('out'), 'api_data.json'), 'r')
+	apidata = api_data.read()
+	api_data.close()
+	apidata = loads(apidata)
+
+	# generate insomnia.json content
+	content = {
+		'_type': 'export',
+		'__export_format': 4,
+		'resources': [
+			{
+				'_type': 'workspace',
+				'_id': '__WORKSPACE_ID__',
+				'parentId': None,
+				'name': frappe.get_site_path().replace('./', '').title()
+			},
+			{
+				'_type': 'environment',
+				'_id': '__ENVIRONMENT_1__',
+				'parentId': '__WORKSPACE_ID__',
+				'name': 'Base Environment',
+				'data': {
+					'base_url': frappe.utils.get_url(),
+					'token': None
+				}
+			}
+		]
+	}
+
+	# groups
+	groups = []
+	for i in apidata:
+		groups.append(i.get('group'))
+
+	groups = list(set(groups))
+	
+	group_map = {}
+	for i in range(len(groups)):
+		group_map[groups[i]] = '__FOLDER_{}__'.format(str(i + 1))
+		content.get('resources').append({
+			'_type': 'request_group',
+			'_id': group_map[groups[i]],
+			'name': groups[i],
+			'parentId': '__WORKSPACE_ID__'
+		})
+
+	# requests
+	for i in range(len(apidata)):
+		cur_i = apidata[i]
+		headers = []
+		headers_ = []
+		for j in list(cur_i.get('header').get('fields').values()):
+			headers_ += j
+
+		print(headers_, type(headers_), len(headers_))
+
+		for j in headers_:
+			headers.append({
+				'name': j.get('field'),
+				'value': j.get('defaultValue', None)
+			})
+
+		content.get('resources').append({
+			'_type': 'request',
+			'_id': '__REQUEST_{}__'.format(str(i + 1)),
+			'parentId': group_map.get(cur_i.get('group')),
+			'name': cur_i.get('title'),
+			'method': cur_i.get('type'),
+			'url': '{{{{base_url}}}}{}'.format(cur_i.get('url')),
+			'body': {
+				'mimeType': 'application/json',
+				'text': cur_i.get('parameter').get('examples')[0].get('content')
+			},
+			'headers': headers
+		})
+	
+
+	delete_apidocs_dirs(apidoc_dir_paths)
+	download_file(filename='insomnia.json', filecontent=dumps(content))
