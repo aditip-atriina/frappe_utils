@@ -1,4 +1,4 @@
-from frappe import _
+import frappe
 from ..responder import responder
 class APIException(Exception):
 	"""
@@ -11,12 +11,16 @@ class APIException(Exception):
 		return e.respond()
 	"""
 
-	http_status_code = message = None
+	http_status_code = 500
+	message = frappe._('Something went Wrong')
+	save_error_log = True
 	
-	def __init__(self, message=_('Something went Wrong'), errors={}):
-		if not self.message:
+	def __init__(self, message=None, errors={}):
+		if message:
 			self.message = message
 		self.errors = errors
 
 	def respond(self):
+		if self.save_error_log:
+			frappe.log_error()
 		return responder.respond(status=self.http_status_code, message=self.message, errors=self.errors)
