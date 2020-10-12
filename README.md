@@ -44,6 +44,7 @@ class ValidationException(APIException):
 * Use `utils.validator.validate(data, rules)` to validate data sent to the API
 * For rules, checkout [validator](https://pypi.org/project/validator/) python package
 * New rule: <kbd>utils.validator.rules.ExistsRule(doctype='User', fields='email', message='Email already taken')</kbd>
+* New rule: <kbd>utils.validator.rules.LengthRule(length=10, message='Should be atleast {arg} in length.')</kbd>
 * New rule: To validate HTTP method
 <kbd>utils.validator.validate_http_method('post', 'patch')</kbd>
 
