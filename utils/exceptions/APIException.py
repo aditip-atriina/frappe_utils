@@ -14,11 +14,13 @@ class APIException(Exception):
 	http_status_code = 500
 	message = frappe._('Something went Wrong')
 	save_error_log = True
+	errors = {}
 	
-	def __init__(self, message=None, errors={}):
+	def __init__(self, message=None, errors=None):
 		if message:
 			self.message = message
-		self.errors = errors
+		if errors:
+			self.errors = errors
 
 	def respond(self):
 		if self.save_error_log:
