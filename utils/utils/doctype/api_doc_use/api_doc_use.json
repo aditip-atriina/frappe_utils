@@ -1,0 +1,36 @@
+{
+ "creation": "2020-09-12 19:06:54.361442",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "api_doc",
+  "api_doc_title"
+ ],
+ "fields": [
+  {
+   "fieldname": "api_doc",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "API Doc",
+   "options": "API Doc"
+  },
+  {
+   "fieldname": "api_doc_title",
+   "fieldtype": "Data",
+   "label": "API Doc Title",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-09-12 20:41:00.687409",
+ "modified_by": "Administrator",
+ "module": "Utils",
+ "name": "API Doc Use",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
